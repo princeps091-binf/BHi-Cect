@@ -1,4 +1,4 @@
-#robustness
+#Spectral clustering
 library(readr)
 library(caret)
 library(Matrix)
@@ -17,11 +17,6 @@ Rao_matrix<-function(x){
                                    j = chr1_in_idx[c(as.character(x2$X2),as.character(x2$X1))],
                                    x = c(x2$X3,x2$X3),
                                    dimnames = list(names(chr1_in_idx),names(chr1_in_idx)))
-  #colnames(HiCO_in_chr1_mat)<-names(chr1_in_idx)
-  #rownames(HiCO_in_chr1_mat)<-names(chr1_in_idx)
-  #copy the upper triangle to the lower part of the matrix
-  #HiCO_in_chr1_mat[lower.tri(HiCO_in_chr1_mat)] <- t(HiCO_in_chr1_mat)[lower.tri(HiCO_in_chr1_mat)]
-  #eleminate self-ligation contribution
   diag(HiCO_in_chr1_mat)<-NA
   return(HiCO_in_chr1_mat)
 }
@@ -64,30 +59,17 @@ part_cond_calc<-function(x,reff_g,g_chr1){
   #perform kmeans with 2 clusters in first 2 smallest eigen vector space
   res<-kmeans(x$vectors,2,nstart=5)
   #calculate the conductance and expansion of the resulting k clusters
-  #g_temp_cond<-c()
-  #g_temp_exp<-c()
-  #l_temp_cond<-c()
   l_temp_exp<-c()
   sub_g_list<-list()
   for (j in 1:2){
     #create the subnetwork
     sub_g_temp<- induced_subgraph(reff_g,which(res$cluster==j))
     #create cluster label in whole network
-    #global
-    #g2<-make_clusters(g_chr1,ifelse(V(g_chr1)$name %in% V(sub_g_temp)$name,1,2))
-    #local
+     
     g3<-make_clusters(reff_g,ifelse(V(reff_g)$name %in% V(sub_g_temp)$name,1,2),modularity = F)
-    #conductance
-    #global
-    #g_temp_cond<- c(g_temp_cond,sum(igraph::crossing(g2,g_chr1))/(2*length(E(sub_g_temp))+sum(igraph::crossing(g2,g_chr1))))
-    #local
-    #l_temp_cond<- c(l_temp_cond,sum(igraph::crossing(g3,reff_g))/(2*length(E(sub_g_temp))+sum(igraph::crossing(g3,reff_g))))
     
     #expansion
-    #global
-    #g_temp_exp<- c(g_temp_exp,sum(E(g_chr1)$weight[which(igraph::crossing(g2,g_chr1))])/(sum(graph.strength(sub_g_temp)))) 
-    #local
-    l_temp_exp<- c(l_temp_exp,sum(E(reff_g)$weight[which(igraph::crossing(g3,reff_g))])/(sum(graph.strength(sub_g_temp)))) 
+     l_temp_exp<- c(l_temp_exp,sum(E(reff_g)$weight[which(igraph::crossing(g3,reff_g))])/(sum(graph.strength(sub_g_temp)))) 
     
     #save the members of considered cluster
     temp_name<-paste(length(V(sub_g_temp)$name),length(E(sub_g_temp)),min(as.numeric(unlist(lapply(strsplit(V(sub_g_temp)$name,','),'[',1)))),max(as.numeric(unlist(lapply(strsplit(V(sub_g_temp)$name,','),'[',1)))),sep='_')
@@ -95,7 +77,6 @@ part_cond_calc<-function(x,reff_g,g_chr1){
     rm(sub_g_temp,g3)
     
   }
-  #return(list(g_temp_cond,sub_g_list,g_temp_exp,l_temp_cond,l_temp_exp))
   return(list(sub_g_list,l_temp_exp))
 }
 
@@ -114,10 +95,7 @@ spec_bipart<-function(chr1_mat,g_chr1){
   #container to save cluster hierarchy as list of lists
   chr1_tree_list<-list()
   #containers for cluster member list, cluster conductance/expansion
-  #chr1_tree_g_cond<-c()
-  #chr1_tree_g_exp<-c()
-  #chr1_tree_l_cond<-c()
-  #chr1_tree_l_exp<-c()
+  
   
   chr1_tree_cl<- list()
   
@@ -129,16 +107,6 @@ spec_bipart<-function(chr1_mat,g_chr1){
   #save cluster membership,conductance and expansion
   chr1_tree_cl<-list(chr1_tree_cl, res_chr1[1])
   chr1_tree_cl<-do.call(c, unlist(chr1_tree_cl, recursive=FALSE))
-  
-  #chr1_tree_g_cond<-c(chr1_tree_g_cond, res_chr1[[1]])
-  #names(chr1_tree_g_cond)<- names(chr1_tree_cl)
-  #chr1_tree_g_exp<-c(chr1_tree_g_exp, res_chr1[[3]])
-  #names(chr1_tree_g_exp)<- names(chr1_tree_cl)
-  
-  #chr1_tree_l_cond<-c(chr1_tree_l_cond, res_chr1[[4]])
-  #names(chr1_tree_l_cond)<- names(chr1_tree_cl)
-  #chr1_tree_l_exp<-c(chr1_tree_l_exp, res_chr1[[5]])
-  #names(chr1_tree_l_exp)<- names(chr1_tree_cl)
   
   #temporary list of candidate cluster to further partition
   ok_part<-names(chr1_tree_cl)
@@ -182,20 +150,7 @@ spec_bipart<-function(chr1_mat,g_chr1){
       print('cl append')
       for(k in names(res_subg1[[1]])){chr1_tree_cl[[k]]<-res_subg1[[1]][[k]]}
       
-      #print('cond append')
-      #chr1_tree_g_cond<-c(chr1_tree_g_cond, res_subg1[[1]])
-      #names(chr1_tree_g_cond)<- names(chr1_tree_cl)
-      #print('exp append')
-      #chr1_tree_g_exp<-c(chr1_tree_g_exp, res_subg1[[3]])
-      #names(chr1_tree_g_exp)<- names(chr1_tree_cl)
-      
-      #print('cond append')
-      #chr1_tree_l_cond<-c(chr1_tree_l_cond, res_subg1[[4]])
-      #names(chr1_tree_l_cond)<- names(chr1_tree_cl)
-      #print('exp append')
-      #chr1_tree_l_exp<-c(chr1_tree_l_exp, res_subg1[[5]])
-      #names(chr1_tree_l_exp)<- names(chr1_tree_cl)
-      
+         
       #Only consider future cluster partition if their expansion is majoritarily inside the cluster
       ok_part_temp<-names(res_subg1[[1]])[which(res_subg1[[2]]<1)]
       
