@@ -8,7 +8,7 @@ library(dplyr)
 library(data.tree)
 options(scipen=999999999)
 ################################################################################
-#Building adjacency matrix and power transform
+#Building adjacency matrix from the three column output of juicer_tool
 Rao_matrix<-function(x){
   x2<-x%>%filter(!(is.na(X3)))
   chr1_in_idx<-seq(1,length(unique(c(x2$X1,x2$X2))))
@@ -54,17 +54,17 @@ lp_fn<-function(x){
   }
 }
 #Bipartition function
-
+#delineat bi-partitions using kmeans and compute expansion
 part_cond_calc<-function(x,reff_g,g_chr1){
   #perform kmeans with 2 clusters in first 2 smallest eigen vector space
   res<-kmeans(x$vectors,2,nstart=5)
-  #calculate the conductance and expansion of the resulting k clusters
+  #calculate the expansion of the resulting k clusters
   l_temp_exp<-c()
   sub_g_list<-list()
   for (j in 1:2){
     #create the subnetwork
     sub_g_temp<- induced_subgraph(reff_g,which(res$cluster==j))
-    #create cluster label in whole network
+    #create cluster label in considered subnetwork
      
     g3<-make_clusters(reff_g,ifelse(V(reff_g)$name %in% V(sub_g_temp)$name,1,2),modularity = F)
     
@@ -95,8 +95,6 @@ spec_bipart<-function(chr1_mat,g_chr1){
   #container to save cluster hierarchy as list of lists
   chr1_tree_list<-list()
   #containers for cluster member list, cluster conductance/expansion
-  
-  
   chr1_tree_cl<- list()
   
   #whole chromosome laplacian
@@ -104,7 +102,7 @@ spec_bipart<-function(chr1_mat,g_chr1){
   #spectral clusters
   res_chr1<-part_cond_calc(lpe_chr1,g_chr1,g_chr1)
   
-  #save cluster membership,conductance and expansion
+  #save cluster membership and expansion
   chr1_tree_cl<-list(chr1_tree_cl, res_chr1[1])
   chr1_tree_cl<-do.call(c, unlist(chr1_tree_cl, recursive=FALSE))
   
