@@ -40,6 +40,18 @@ install.packages(c('readr','caret','Matrix','igraph','RSpectra','dplyr','data.tr
 
 ### Input
 - Expects a 3-column sparse contact matrix as input
+```r
+  #load the 3-column sparse matrix Hi-C data
+  chr_dat<- read_delim(./path/to/hic_file.txt)
+  #power transform
+  chr_pow<- pow_trans(chr_mat,1)
+  #build the Hi-C interaction graph
+  g_chr1<- graph_from_adjacency_matrix(chr_pow,weighted = T)
+  #Spectral Clustering
+  chr_spec_res<- spec_bipart(chr_pow ,g_chr1)
+  
+```
+---
 
 ### Output
 - Ouputs a list with 2 elements 
