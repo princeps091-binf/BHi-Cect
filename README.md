@@ -12,7 +12,7 @@
 
 ---
 
-BHi-Cect aims to find preferentially self-interacting chromosome clusters using Hi-C data. It assumes only that chromosome architecture consists of a nested hierarchy where we expect to find smaller-sized clusters nested within larger-sized clusters.
+BHi-Cect aims to find preferentially self-interacting chromosome clusters using Hi-C data. It only assumes that chromosome architecture consists of a nested hierarchy where we expect to find smaller-sized clusters nested within larger-sized clusters.
 
 ---
 
