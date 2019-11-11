@@ -65,7 +65,9 @@ Here is a sample of the routines I use to illustrate the clusters found
 
 - Tree
 ![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/tree.png)
+
 - Cluster map
+![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/50kb_chr19_bencl.png)
 
 - Nestedness map
 
