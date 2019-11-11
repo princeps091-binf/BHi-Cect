@@ -63,7 +63,7 @@ In the course of developing the algorithm I have developped a series of visualis
 
 Here is a sample of the routines I use to illustrate the clusters found
 
-- Tree (chr22 IMR90)
+- Tree (chr17 IMR90)
 ![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/tree.png)
 
 - Cluster map (chr22 IMR90)
