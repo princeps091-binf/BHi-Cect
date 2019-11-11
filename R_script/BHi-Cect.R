@@ -180,7 +180,7 @@ timing<-list()
 for(i in chr_set){
   #load chromosome data
   #data input
-  chr_dat<- read_delim(paste("D:/K562/5kb/",i,".txt",sep=''),"\t", escape_double = FALSE, col_names = FALSE,trim_ws = TRUE)
+  chr_dat<- read_delim('path/to/3-column-hi-c-data_file')
   
   #process
   print(paste(i,':','sparse matrix'))
@@ -195,24 +195,14 @@ for(i in chr_set){
     chr_pow<-chr_pow[,-out]
   }
   
-  #save(chr_pow,file=paste("D:/spec_res/robustness/resolution/5kb/",i,"/",i,"_pow_mat.rda",sep=''))
-  save(chr_pow,file=paste("D:/spec_res/K562/5kb/",i,"/",i,"_pow_mat.rda",sep=''))
-  #save(chr_pow,file=paste("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/100kb/",i,"/",i,"_pow_mat.rda",sep=''))
   #create the corresponding graph
   print(paste(i,':','graph building'))
   g_chr1<- graph_from_adjacency_matrix(chr_pow,weighted = T)
   #eleminate self loop 
   g_chr1<-delete.edges(g_chr1,E(g_chr1)[which(which_loop(g_chr1))])
-  #save(g_chr1,file=paste("D:/spec_res/robustness/resolution/5kb/",i,"/",i,"_gchr.rda",sep=''))
-  save(g_chr1,file=paste("D:/spec_res/K562/5kb/",i,"/",i,"_gchr.rda",sep=''))
-  
-  #save(g_chr1,file=paste("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/100kb/",i,"/",i,"_gchr.rda",sep=''))
+   
   print(paste(i,':','spectral clustering'))
   chr_spec_res<- spec_bipart(chr_pow ,g_chr1)
-  timing[[i]]<-proc.time() - ptm
-  #save(chr_spec_res,file=paste("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/100kb/",i,"/",i,"_spec_res.rda",sep=''))
-  #save(chr_spec_res,file=paste("D:/spec_res/robustness/resolution/5kb/",i,"/",i,"_spec_res.rda",sep=''))
-  save(chr_spec_res,file=paste("D:/spec_res/K562/5kb/",i,"/",i,"_spec_res.rda",sep=''))
   
   
   
