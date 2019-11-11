@@ -63,14 +63,14 @@ In the course of developing the algorithm I have developped a series of visualis
 
 Here is a sample of the routines I use to illustrate the clusters found
 
-- Tree
+- Tree (chr22 IMR90)
 ![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/tree.png)
 
-- Cluster map
+- Cluster map (chr22 IMR90)
 ![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/50kb_chr19_bencl.png)
 
-- Nestedness map
-
+- Nestedness map (chr18 IMR90)
+![alt text](https://github.com/princeps091-binf/BHi-Cect/blob/master/images/top_dom_nest_chr18.png)
 ---
 
 ## License
