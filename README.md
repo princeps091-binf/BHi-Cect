@@ -43,6 +43,8 @@ install.packages(c('readr','caret','Matrix','igraph','RSpectra','dplyr','data.tr
 ```r
   #load the 3-column sparse matrix Hi-C data
   chr_dat<- read_delim(./path/to/hic_file.txt)
+  #convert into sparse matrix format
+  chr_mat<-Rao_matrix(chr_dat)
   #power transform
   chr_pow<- pow_trans(chr_mat,1)
   #build the Hi-C interaction graph
