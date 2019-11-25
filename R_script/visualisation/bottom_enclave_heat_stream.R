@@ -158,26 +158,6 @@ for(chr_idx in chr_set[-1]){
   #with individual enclave colours
   sparse_emap<-sparseMatrix(i=full_edge_list$ego_id,j=full_edge_list$alter_id,x=full_edge_list$enclave_id,dimnames = list(names(id_conv),names(id_conv)))
   image(as.matrix(sparse_emap),xaxt= "n", yaxt= "n" ,breaks=c(0,1,enclave_id_conv),col=c('black',gg_color_hue(length(enclave_id_conv))))
-  #png(paste0('~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/rebuttal/fig/F3/','50kb','_',"tick","_",chr,'_','bencl','.png'), width =40,height = 40,units = 'mm',type='cairo',res=3000)
-  png(paste0('~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/rebuttal/fig/F3/','low_res_','5kb',"_",chr,'_','bencl','.png'), width =50,height = 50,units = 'mm',res=1000)
-  #par(mar=c(0.2,0.2,0.1,0.1))
-  par(mar=c(0,0,0,0))
-  
-  image(as.matrix(sparse_emap),xaxt= "n", yaxt= "n" ,breaks=c(0,1,enclave_id_conv),col=c('black',gg_color_hue(length(enclave_id_conv))))
-  #image(as.matrix(chr_f_mat),xaxt= "n", yaxt= "n", col=viridis(100))
-  
-  round_ticks<-seq(0,max(as.numeric(colnames(sparse_emap))),by=20e6)
-  round_ticks<-round_ticks[which( round_ticks%in% colnames(sparse_emap))]
-  round_tick_pos<-which(colnames(sparse_emap) %in% round_ticks)/length(colnames(sparse_emap))
-  
-  emap_temp_lab<-paste0(round_ticks/1e6,' Mb')
-  if(round_tick_pos[1]< 0.001){emap_temp_lab[1]<-NA}
-  
-  #no label heatmap
-  #axis(1, at =round_tick_pos,labels=NA,cex.axis=0.5,las=0,lwd = 0, lwd.ticks = 0.5,tck=-0.02)
-  #axis(2, at =round_tick_pos,labels=NA,cex.axis=0.5,las=0,lwd = 0, lwd.ticks = 0.5,tck=-0.02)
-  
-  dev.off()
-  
+    
   
 }
