@@ -121,18 +121,18 @@ options(scipen=999999999)
 #load chr of interest
 chr='chr18'
 #load the contact matrix
-load(paste0("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/50kb/",chr,"/",chr,"_pow_mat.rda"))
+load(path/to/power/transformed/HI-C-matrix)
 chr_50_mat<-chr_pow
 rm(chr_pow)
 #load the chr_spec_res
-load(file=paste("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/50kb/",chr,"/",chr,"_spec_res.rda",sep=''))
+load(path/to/BHi-Cect/output)
 chr_spec_res_50kb<-chr_spec_res
 rm(chr_spec_res)
 
 #build the bpt
 chr_bpt<-FromListSimple(chr_spec_res_50kb$part_tree)
 #load the chr graph
-load(paste0("~/../../media/vipin/DISQUEDUR/PhD_jap/HiC_net/data/spec_res/50kb/",chr,"/",chr,"_gchr.rda"))
+load(path/to/Hi-C/interaction-network)
 g50_chr<-g_chr1
 rm(g_chr1)
 #include gaps in the heatmap
@@ -173,7 +173,3 @@ full_edge_list$alter_id<-id_conv[full_edge_list$alter]
 
 sparse_emap<-sparseMatrix(i=full_edge_list$ego_id,j=full_edge_list$alter_id,x=full_edge_list$depth,dimnames = list(names(id_conv),names(id_conv)))
 image.nan(as.matrix(sparse_emap),zlim = c(0,range(sparse_emap@x,na.rm = T)[2]),col = c('black',magma(100)),na.color = 'black',xaxt= "n", yaxt= "n")
-png(paste0('~/Documents/github_readme/top_dom_nest','_',chr,'.png'), width =50,height = 50,units = 'mm',pointsize = 2,type='cairo',res=1000)
-par(mar=c(0,0,0,0))
-image.nan(as.matrix(sparse_emap),zlim = c(0,range(sparse_emap@x,na.rm = T)[2]),col = c('black',magma(100)),na.color = 'black',xaxt= "n", yaxt= "n")
-dev.off()
